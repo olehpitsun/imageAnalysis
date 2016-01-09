@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.input.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane prefHeight="400.0" prefWidth="600.0" stylesheets="@DarkTheme.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.view.RootLayoutController">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Головна">
+               <items>
+                   <MenuItem mnemonicParsing="false" onAction="#handleStart" text="Головна"/>
+
+                   <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Save">
+                       <accelerator>
+                           <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
+                       </accelerator>
+                   </MenuItem>
+                   <MenuItem mnemonicParsing="false" onAction="#handleSaveAs" text="Save As..."/>
+
+                   <MenuItem mnemonicParsing="false" onAction="#SaveImage" text="Зберегти">
+                     <accelerator>
+                     </accelerator>
+                  </MenuItem>
+
+                  <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Вихід" />
+
+               </items>
+          </Menu>
+
+            <Menu mnemonicParsing="false" text="Попередня обр.">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#handlePreProcessing" text="Попередня обр."/>
+                </items>
+            </Menu>
+          <Menu mnemonicParsing="false" text="Фільтри">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleFilters" text="Фільтри" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Сегментація">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#handleSegmentation" text="Сегментація" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Виділ. областей">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#handleRegionDetect" text="Виділення областей"/>
+                </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
