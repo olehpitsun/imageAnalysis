@@ -14,14 +14,7 @@
                <items>
                    <MenuItem mnemonicParsing="false" onAction="#handleStart" text="Головна"/>
 
-                   <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Save">
-                       <accelerator>
-                           <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP"/>
-                       </accelerator>
-                   </MenuItem>
-                   <MenuItem mnemonicParsing="false" onAction="#handleSaveAs" text="Save As..."/>
-
-                   <MenuItem mnemonicParsing="false" onAction="#SaveImage" text="Зберегти">
+                   <MenuItem mnemonicParsing="false" onAction="#SaveImage" text="Зберегти як">
                      <accelerator>
                      </accelerator>
                   </MenuItem>

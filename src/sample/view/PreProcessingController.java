@@ -1,8 +1,12 @@
 package sample.view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import sample.Main;
+import sample.core.DB;
 import sample.model.PreProcessing.PreProcessing;
 import sample.model.Person;
+import sample.model.RegionDetectByColor;
 import sample.util.DateUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -20,8 +24,12 @@ import org.opencv.imgproc.Imgproc;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.*;
-
+import java.sql.*;
+import java.util.Properties;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
@@ -98,6 +106,10 @@ public class PreProcessingController {
     protected Mat changedimage;
 
     protected Main mainApp;
+    //private ObservableList<RegionDetectByColor> rdbcData = FXCollections.observableArrayList();
+    //public ObservableList<RegionDetectByColor> getArea() {
+      //  return rdbcData;
+    //S}
 
     /**
      * The constructor.
@@ -177,10 +189,29 @@ public class PreProcessingController {
     }
 
     @FXML
-    public void saveChangeFile(){
-        this.image= this.changedimage ;
-        sample.model.Image.setImageMat(this.image);
+    public void saveChangeFile()throws
+            ClassNotFoundException,SQLException{
 
+         Connection con;
+         Statement stmt;
+         ResultSet rs;
+        Connection c = DB.connect("127.0.0.1","3306","ki","root","oleh123");
+        stmt = c.createStatement();
+
+        String query = "select id, name, surname from users";
+
+        rs = stmt.executeQuery(query);
+
+        while (rs.next()) {
+            int id = rs.getInt(1);
+            String name = rs.getString(2);
+            String surname = rs.getString(3);
+            System.out.printf("id: %d, name: %s, surname: %s %n", id, name, surname);
+        }
+        c.close();
+        /*this.image= this.changedimage ;
+        sample.model.Image.setImageMat(this.image);
+*/
     }
 
     @FXML
@@ -201,6 +232,7 @@ public class PreProcessingController {
         });
 
     }
+
 
     @FXML
     private void Contrast(int sz){

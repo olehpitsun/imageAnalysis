@@ -11,11 +11,11 @@ public class RegionDetectByColorListWrapper {
     private List<RegionDetectByColor> regionDetectByColors;
 
     @XmlElement(name = "area")
-    public List<RegionDetectByColor> getArea() {
+    public List<RegionDetectByColor> getAreaList() {
         return regionDetectByColors;
     }
 
-    public void setArea(List<RegionDetectByColor> regionDetectByColors) {
+    public void setAreaList(List<RegionDetectByColor> regionDetectByColors) {
         this.regionDetectByColors = regionDetectByColors;
     }
 }

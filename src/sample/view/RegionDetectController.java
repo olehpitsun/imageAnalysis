@@ -3,6 +3,7 @@ package sample.view;
 import sample.Main;
 import sample.model.Filters.FilterColection;
 import sample.model.Filters.Filters;
+import sample.model.ObjectDetect.ObjectsD;
 import sample.model.RegionDetectByColor;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,6 +21,7 @@ import org.opencv.imgproc.Imgproc;
 import org.opencv.imgproc.Moments;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,12 @@ public class RegionDetectController {
     @FXML
     private Button detectRegionButton;
 
+    @FXML
+    private Button saveObjParamValueXMLfile;
+
+    @FXML
+    private Button saveXMLfile;
+
     private Stage dialogStage;
 
     private boolean okClicked = false;
@@ -64,6 +72,9 @@ public class RegionDetectController {
     protected Mat changedimage;
 
     protected Main mainApp;
+
+    ObservableList<RegionDetectByColor> rdbcData = FXCollections.observableArrayList();
+    ObservableList<ObjectsD> objectsDs = FXCollections.observableArrayList();
 
     /**
      * The constructor.
@@ -122,14 +133,71 @@ public class RegionDetectController {
             // {
             rect = Imgproc.boundingRect(contours.get(contourIdx));
 
-            System.out.println(rect.height * rect.width);
+            //System.out.println(rect.height * rect.width);
+
+            String areValueTemp = Double.toString (rect.height * rect.width);
+            rdbcData.add(new RegionDetectByColor(areValueTemp));
+
             Imgproc.drawContours ( src, contours, contourIdx, new Scalar(0,0,255), 2);
+
+            this.saveXMLfile.setDisable(false);
+            this.saveObjParamValueXMLfile.setDisable(true);
+
             //Core.rectangle(src, new Point(rect.x, rect.height), new Point(rect.y, rect.width), new Scalar(0, 0, 255));
 
         }
 
         this.changedimage = src;
         this.setCurrentImage(src);
+    }
+
+    /**
+     * select path to save xml file
+     */
+    @FXML
+    private void handleSaveAs() {
+        FileChooser fileChooser = new FileChooser();
+
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                "XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show save file dialog
+        File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+        mainApp.savePersonDataToFile(file, rdbcData);
+
+        if (file != null) {
+            // Make sure it has the correct extension
+            if (!file.getPath().endsWith(".xml")) {
+                file = new File(file.getPath() + ".xml");
+            }
+        }
+    }
+
+
+    /**
+     * select path to save xml file
+     */
+    @FXML
+    private void handleObjectsParamValueSaveAs() {
+        FileChooser fileChooser = new FileChooser();
+
+        // Set extension filter
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
+                "XML files (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(extFilter);
+
+        // Show save file dialog
+        File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+        mainApp.saveObjParamDataToFile(file, objectsDs);
+
+        if (file != null) {
+            // Make sure it has the correct extension
+            if (!file.getPath().endsWith(".xml")) {
+                file = new File(file.getPath() + ".xml");
+            }
+        }
     }
 
     @FXML
@@ -174,12 +242,17 @@ public class RegionDetectController {
         {
             MatOfPoint2f contour2f = new MatOfPoint2f( contours.get(i).toArray() );
             System.out.println(" Контур: " + i + " Площа: " + Imgproc.contourArea(contours.get(i)) + " Довжина: " + Imgproc.arcLength(contour2f, true) + "\n");
-            System.out.print(" Контур: " + i + " Площа: " + Imgproc.contourArea(contours.get(i)) + " Довжина: " + Imgproc.arcLength(contour2f, true) + "\n");
+            //System.out.print(" Контур: " + i + " Площа: " + Imgproc.contourArea(contours.get(i)) + " Довжина: " + Imgproc.arcLength(contour2f, true) + "\n");
+
+            objectsDs.add(new ObjectsD(i,Imgproc.contourArea(contours.get(i)), Imgproc.arcLength(contour2f, true) ));
+
             //Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
             Imgproc.drawContours(drawing, contours, i, new Scalar(0, 0, 255), 2, 1, hierarchy, 0, new Point());
             Core.circle(drawing, mc.get(i), 4, new Scalar(0, 0, 255), -1, 2, 0);
         }
 
+        this.saveObjParamValueXMLfile.setDisable(false);
+        this.saveXMLfile.setDisable(true);
         this.changedimage = drawing;
         this.setCurrentImage(drawing);
 

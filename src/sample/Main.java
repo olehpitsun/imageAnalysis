@@ -23,6 +23,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
+import sample.model.ObjectDetect.ObjectsD;
+import sample.model.ObjectDetect.ObjectsDListWrapper;
 import sample.model.RegionDetectByColor;
 import sample.model.RegionDetectByColorListWrapper;
 import sample.view.*;
@@ -48,6 +50,7 @@ public class Main extends Application {
     private BorderPane rootLayout;
 
     private ObservableList<RegionDetectByColor> rdbcData = FXCollections.observableArrayList();
+    private ObservableList<ObjectsD> objParamData = FXCollections.observableArrayList();
 
     /**
      * Constructor
@@ -56,8 +59,11 @@ public class Main extends Application {
 
     }
 
-    public ObservableList<RegionDetectByColor> getPersonData() {
+    public ObservableList<RegionDetectByColor> getArea() {
         return rdbcData;
+    }
+    public ObservableList<ObjectsD> getParamData() {
+        return objParamData;
     }
 
     @Override
@@ -137,6 +143,7 @@ public class Main extends Application {
             // Give the controller access to the main app.
             PreProcessingController controller = loader.getController();
             controller.setMainApp(this);
+            //controller.setPerson(rdbcData);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -235,6 +242,10 @@ public class Main extends Application {
         rdbcData.add(new RegionDetectByColor("Hans"));
         rdbcData.add(new RegionDetectByColor("Ruth"));
         rdbcData.add(new RegionDetectByColor("Heinz"));
+
+        rdbcData.forEach(s -> {
+            System.out.println("s = " + s);
+        });
         Preferences prefs = Preferences.userNodeForPackage(Main.class);
         if (file != null) {
             prefs.put("filePath", file.getPath());
@@ -250,16 +261,12 @@ public class Main extends Application {
     }
 
     /**
-     * Saves the current person data to the specified file.
+     * Saves the current data to the specified file.
      *
      * @param file
      */
-    public void savePersonDataToFile(File file) {
+    public void savePersonDataToFile(File file, ObservableList<RegionDetectByColor> rdbcDataAreaList) {
         try {
-
-            rdbcData.add(new RegionDetectByColor("Hans"));
-            rdbcData.add(new RegionDetectByColor("Ruth"));
-            rdbcData.add(new RegionDetectByColor("Heinz"));
 
             JAXBContext context = JAXBContext
                     .newInstance(RegionDetectByColorListWrapper.class);
@@ -268,7 +275,7 @@ public class Main extends Application {
 
             // Wrapping our person data.
             RegionDetectByColorListWrapper wrapper = new RegionDetectByColorListWrapper();
-            wrapper.setArea(rdbcData);
+            wrapper.setAreaList(rdbcDataAreaList);
 
             // Marshalling and saving XML to the file.
             m.marshal(wrapper, file);
@@ -276,6 +283,35 @@ public class Main extends Application {
             // Save the file path to the registry.
             setPersonFilePath(file);
         } catch (Exception e) { // catches ANY exception
+            System.out.print(e.toString());
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText("Could not save data");
+            alert.setContentText("Could not save data to file:\n" + file.getPath());
+
+            alert.showAndWait();
+        }
+    }
+
+    public void saveObjParamDataToFile(File file, ObservableList<ObjectsD> objDataAreaList) {
+        try {
+
+            JAXBContext context = JAXBContext
+                    .newInstance(ObjectsDListWrapper.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+            // Wrapping our person data.
+            ObjectsDListWrapper wrapper = new ObjectsDListWrapper();
+            wrapper.setObjectsD(objDataAreaList);
+
+            // Marshalling and saving XML to the file.
+            m.marshal(wrapper, file);
+
+            // Save the file path to the registry.
+            setPersonFilePath(file);
+        } catch (Exception e) { // catches ANY exception
+            System.out.print(e.toString());
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText("Could not save data");

@@ -99,19 +99,22 @@ public class RootLayoutController {
 
     @FXML
     public void SaveImage () {
+
         String path ="";
         String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
         Highgui.imwrite( path + timeStamp + ".png", Image.getImageMat());
+
     }
 
     @FXML
     private void handleSave() {
-        File personFile = mainApp.getPersonFilePath();
+        /*File personFile = mainApp.getPersonFilePath();
         if (personFile != null) {
             mainApp.savePersonDataToFile(personFile);
         } else {
             handleSaveAs();
         }
+        */
     }
 
     /**
@@ -119,7 +122,7 @@ public class RootLayoutController {
      */
     @FXML
     private void handleSaveAs() {
-        FileChooser fileChooser = new FileChooser();
+        /*FileChooser fileChooser = new FileChooser();
 
         // Set extension filter
         FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
@@ -128,14 +131,15 @@ public class RootLayoutController {
 
         // Show save file dialog
         File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+        mainApp.savePersonDataToFile(file);
 
         if (file != null) {
             // Make sure it has the correct extension
             if (!file.getPath().endsWith(".xml")) {
                 file = new File(file.getPath() + ".xml");
             }
-            mainApp.savePersonDataToFile(file);
         }
+        */
     }
 
     /**

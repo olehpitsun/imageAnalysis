@@ -43,15 +43,20 @@
                            <Button mnemonicParsing="false" onAction="#detectByColor" text="За кольором" />
                            <Button fx:id="detectRegionButton" alignment="CENTER" disable="false" onAction="#SimpleDetect" text="Звичайне" GridPane.rowIndex="1"/>
 
+
                        </children>
                    </GridPane>
+                   <ButtonBar layoutX="176.0" layoutY="233.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
+                       <buttons>
+                           <Button fx:id="saveXMLfile" disable="true" defaultButton="true" mnemonicParsing="false" onAction="#handleSaveAs" text="XML" />
+                       </buttons>
+                       <buttons>
+                           <Button fx:id="saveObjParamValueXMLfile" disable="true" defaultButton="true" mnemonicParsing="false" onAction="#handleObjectsParamValueSaveAs" text="XML PV" />
+                       </buttons>
+                   </ButtonBar>
 
               </children>
-              <ButtonBar layoutX="176.0" layoutY="233.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0">
-                  <buttons>
-                      <Button defaultButton="true" mnemonicParsing="false" onAction="#handleOk" text="OK" />
-                  </buttons>
-              </ButtonBar>
+
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0" styleClass="background">
                <children>
