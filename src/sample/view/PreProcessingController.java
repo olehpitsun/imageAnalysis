@@ -75,6 +75,8 @@ public class PreProcessingController {
     private Button CurrentImgButton;
 
     @FXML
+    private Button background_1Button;
+    @FXML
     private Slider slider_preproc;
 
     private Stage dialogStage;
@@ -189,10 +191,9 @@ public class PreProcessingController {
     }
 
     @FXML
-    public void saveChangeFile()throws
-            ClassNotFoundException,SQLException{
+    public void saveChangeFile(){
 
-         Connection con;
+        /* Connection con;
          Statement stmt;
          ResultSet rs;
         Connection c = DB.connect("127.0.0.1","3306","ki","root","oleh123");
@@ -208,10 +209,10 @@ public class PreProcessingController {
             String surname = rs.getString(3);
             System.out.printf("id: %d, name: %s, surname: %s %n", id, name, surname);
         }
-        c.close();
-        /*this.image= this.changedimage ;
+        c.close();*/
+        this.image= this.changedimage ;
         sample.model.Image.setImageMat(this.image);
-*/
+
     }
 
     @FXML
@@ -325,8 +326,9 @@ public class PreProcessingController {
         Mat thresholdImg = new Mat();
 
         int thresh_type = Imgproc.THRESH_BINARY_INV;
+
         //if (this.inverse.isSelected())
-           // thresh_type = Imgproc.THRESH_BINARY;
+        // thresh_type = Imgproc.THRESH_BINARY;
 
         // threshold the image with the average hue value
         hsvImg.create(frame.size(), CvType.CV_8U);
@@ -335,10 +337,11 @@ public class PreProcessingController {
 
         // get the average hue value of the image
         double threshValue = this.getHistAverage(hsvImg, hsvPlanes.get(0));
+        System.out.print(threshValue);
 
-        Imgproc.threshold(hsvPlanes.get(0), thresholdImg, threshValue, 179.0, thresh_type);
+        Imgproc.threshold(hsvPlanes.get(1), thresholdImg, threshValue, 179.0, thresh_type);
 
-        Imgproc.blur(thresholdImg, thresholdImg, new Size(3, 3));
+        //Imgproc.blur(thresholdImg, thresholdImg, new Size(3, 3));
 
         // dilate to fill gaps, erode to smooth edges
         Imgproc.dilate(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
@@ -347,12 +350,53 @@ public class PreProcessingController {
         Imgproc.threshold(thresholdImg, thresholdImg, threshValue, 179.0, Imgproc.THRESH_BINARY);
 
         // create the new image
-        Mat foreground = new Mat(frame.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
+        Mat foreground = new Mat(frame.size(), CvType.CV_8UC3, new Scalar(0, 0, 0));
         frame.copyTo(foreground, thresholdImg);
 
         this.changedimage = foreground;
         this.setCurrentImage(foreground);
 
+        //this.background_1();
+
+    }
+
+    @FXML
+    private void background_1(){
+
+        Mat frame = this.image;
+        Mat hsvImg = new Mat();
+        List<Mat> hsvPlanes = new ArrayList<>();
+        Mat thresholdImg = new Mat();
+
+        int thresh_type = Imgproc.THRESH_BINARY_INV;
+        //if (this.inverse.isSelected())
+        // thresh_type = Imgproc.THRESH_BINARY;
+
+        // threshold the image with the average hue value
+        hsvImg.create(frame.size(), CvType.CV_8U);
+        Imgproc.cvtColor(frame, hsvImg, Imgproc.COLOR_BGR2HSV);
+        Core.split(hsvImg, hsvPlanes);
+
+        // get the average hue value of the image
+        double threshValue = this.getHistAverage(hsvImg, hsvPlanes.get(0));
+        System.out.print(threshValue);
+
+        Imgproc.threshold(hsvPlanes.get(0), thresholdImg, 0.1, 255 , thresh_type);
+
+        Imgproc.blur(thresholdImg, thresholdImg, new Size(3, 3));
+
+        // dilate to fill gaps, erode to smooth edges
+        Imgproc.dilate(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
+        Imgproc.erode(thresholdImg, thresholdImg, new Mat(), new Point(-1, -1), 1);
+
+        Imgproc.threshold(thresholdImg, thresholdImg, 0.1, 255, Imgproc.THRESH_BINARY);
+
+        // create the new image
+        Mat foreground = new Mat(frame.size(), CvType.CV_8UC3, new Scalar(255, 255, 255));
+        frame.copyTo(foreground, thresholdImg);
+
+        this.changedimage = foreground;
+        this.setCurrentImage(foreground);
     }
 
     /**

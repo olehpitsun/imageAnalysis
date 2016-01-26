@@ -38,8 +38,9 @@
                       <Button fx:id="HistogramButton" alignment="CENTER" disable="false" onAction="#Histogram" text="Гістограма" GridPane.rowIndex="4" />
 
                       <Button fx:id="BackgroundRemovalButton" alignment="CENTER" disable="false" onAction="#doBackgroundRemoval" text="Виділ. об'єкт" GridPane.rowIndex="5" />
+                      <Button fx:id="background_1Button" alignment="CENTER" disable="false" onAction="#background_1" text="Виділ. об'єкт" GridPane.rowIndex="6" />
 
-                      <Slider fx:id="slider_preproc" disable="true" GridPane.rowIndex="6" />
+                      <Slider fx:id="slider_preproc" disable="true" GridPane.rowIndex="7" />
 
 
                       <Label text="" GridPane.rowIndex="5" />
